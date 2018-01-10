@@ -10,7 +10,7 @@ public class ServiceConfig {
     @Value("${app.nombre}")
     private String appNombre;
 
-    @Value("${entorno}")
+    @Value("${entorno:entorno}")
     private String entorno;
     
     @PostConstruct
