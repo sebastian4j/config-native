@@ -25,3 +25,7 @@ eurekasvr/\.classpath
 eurekasvr/\.project
 
 \.project
+
+organization-service/target/
+
+organization-service/\.classpath

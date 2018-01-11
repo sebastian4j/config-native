@@ -29,7 +29,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <start-class>com.sebastian.confsvr.ConfigServerApplication</start-class>
+        <start-class>confsvr.ConfigServerApplication</start-class>
         <java.version>1.8</java.version>
         <!--<docker.image.name>johncarnell/tmx-confsvr</docker.image.name> 
             <docker.image.tag>chapter3</docker.image.tag> -->
