@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sebastian.clients.OrganizationFeignClient;
 import com.sebastian.dominio.License;
 import com.sebastian.exception.LicenseNotFoundException;
@@ -30,7 +31,32 @@ public class LicenseServiceController {
             return ls.getLicense(organizationId, licenseId);
         }
         else {
-            throw new LicenseNotFoundException("error al obtener licensia", licenseId);
+            throw new LicenseNotFoundException("error al obtener licencia", licenseId);
         }
+    }
+    
+    @HystrixCommand(fallbackMethod = "fallBack")
+    @RequestMapping(value = "/{licenseId}/bd", method = RequestMethod.GET)
+    public License getLicencesBD(@PathVariable("organizationId") String organizationId,
+            @PathVariable("licenseId") String licenseId) throws LicenseNotFoundException {
+        try {
+            Thread.sleep(4000);
+        } catch(Exception e) { e.printStackTrace();} 
+        final License l = ls.getLicense(organizationId, licenseId);
+        if (l != null) {
+            return ls.getLicense(organizationId, licenseId);
+        }
+        else {
+            throw new LicenseNotFoundException("error al obtener licencia", licenseId);
+        }
+    }    
+    
+    public License fallBack(String organizationId, String licenseId) throws LicenseNotFoundException {
+        final License l = new License();
+        l.setId("0");
+        l.setLicenceType("0");
+        l.setOrganizationId("0");
+        l.setProductName("sin servicio de licencias");
+        return l;
     }
 }
