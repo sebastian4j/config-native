@@ -1,2 +1,2 @@
 # config-native
-microservicios con configuracion desde disco/git y jpa con mysql
+microservicios con Spring boot, Spring cloud, configuracion desde disco/git, jpa con oracle-xe, Ribbon, Hystrix, Eureka
