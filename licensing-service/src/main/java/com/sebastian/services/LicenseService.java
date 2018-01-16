@@ -24,7 +24,7 @@ public class LicenseService {
     
     @HystrixCommand
     public License getLicense(String organizationId, String licenseId) {
-        License license = lr.findByOrganizationIdAndId(organizationId, licenseId);       
+        License license = lr.findByOrganizationIdAndId(organizationId, licenseId);           
         return license;
     }
 
