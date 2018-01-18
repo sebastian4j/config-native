@@ -31,3 +31,7 @@ organization-service/target/
 organization-service/\.classpath
 
 licensing-service/nbactions\.xml
+
+zuulsvr/target/
+
+zuulsvr/\.classpath
