@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.sebastian.dominio"})
 @EnableJpaRepositories("com.sebastian.repository")
 @RefreshScope
-@EnableDiscoveryClient
+@EnableDiscoveryClient // usando solo feignClient se puede omitir
 @EnableFeignClients(basePackages = {"com.sebastian.clients"})
 @EnableCircuitBreaker
 public class Application {

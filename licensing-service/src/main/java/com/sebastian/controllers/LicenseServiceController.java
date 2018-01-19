@@ -3,6 +3,7 @@ package com.sebastian.controllers;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sebastian.clients.OrganizationFeignClient;
+import com.sebastian.clients.OrganizationRestTemplateClient;
 import com.sebastian.dominio.License;
 import com.sebastian.exception.LicenseNotFoundException;
 import com.sebastian.services.LicenseService;
@@ -23,6 +24,8 @@ public class LicenseServiceController {
     private LicenseService ls;
     @Autowired
     private OrganizationFeignClient ofc;
+    @Autowired
+    private OrganizationRestTemplateClient ortc;
 
     @RequestMapping(value = "/{licenseId}", method = RequestMethod.GET)
     @HystrixCommand(fallbackMethod = "fallBack",
@@ -47,6 +50,7 @@ public class LicenseServiceController {
     )
     public License getLicences(@PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId) throws LicenseNotFoundException {
+        LOGGER.info("feign template");        
         LOGGER.info("user context holder " + UserContextHolder.getContext().getCorrelationId());
         LOGGER.info("org: " + ofc.getOrganization(organizationId));
         final License l = ls.getLicense(organizationId, licenseId);
@@ -56,7 +60,40 @@ public class LicenseServiceController {
             throw new LicenseNotFoundException("error al obtener licencia", licenseId);
         }
     }
-
+    @HystrixCommand(fallbackMethod = "fallBack",
+            threadPoolKey = "licences", // nuevo thread pool
+            threadPoolProperties = {
+                @HystrixProperty(name = "coreSize", value = "2")
+                , // tamaño del thread pool
+                @HystrixProperty(name = "maxQueueSize", value = "10") // maximo encolados
+            },
+            commandProperties = {
+                    // llamadas consecutivas en 10 segundos
+                @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
+                    // % de llamadas que tienen que fallar luego del anterior
+                @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "75"),
+                    // duerme antes de volver a intentarlo luego de cumplir los anteriores y cortar la conexion
+                @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "7000"),
+                    // duracion del monitoreo para que se cumplan las condiciones descritas
+                @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "10000"),
+                    // numero de coleccion de estadisticas
+                @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
+            }
+    )    
+    @RequestMapping(value = "/{licenseId}/rt", method = RequestMethod.GET)
+    public License getLicencesRestTemplate(@PathVariable("organizationId") String organizationId,
+            @PathVariable("licenseId") String licenseId) throws LicenseNotFoundException {
+        LOGGER.info("rest template");
+        LOGGER.info("user context holder " + UserContextHolder.getContext().getCorrelationId());
+        LOGGER.info("org: " + ortc.getOrganization(organizationId));
+        final License l = ls.getLicense(organizationId, licenseId);
+        if (l != null) {
+            return ls.getLicense(organizationId, licenseId);
+        } else {
+            throw new LicenseNotFoundException("error al obtener licencia", licenseId);
+        }
+    }
+    
     @HystrixCommand(fallbackMethod = "fallBack")
     @RequestMapping(value = "/{licenseId}/bd", method = RequestMethod.GET)
     public License getLicencesBD(@PathVariable("organizationId") String organizationId,
