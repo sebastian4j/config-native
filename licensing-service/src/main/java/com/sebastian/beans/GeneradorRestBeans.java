@@ -3,6 +3,8 @@ package com.sebastian.beans;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
