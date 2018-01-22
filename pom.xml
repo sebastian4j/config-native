@@ -15,6 +15,7 @@
     <module>eurekasvr</module>
     <module>organization-service</module>    
     <module>zuulsvr</module>
+    <module>oathsvr</module>
   </modules>
 
 </project>
