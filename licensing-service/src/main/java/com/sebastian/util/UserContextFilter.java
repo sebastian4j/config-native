@@ -1,6 +1,7 @@
 package com.sebastian.util;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -25,7 +26,7 @@ public class UserContextFilter implements Filter {
     private void init() {
         logger.info("post filter ok");
     }
-    
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -34,12 +35,19 @@ public class UserContextFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         logger.info("filtro invocado");
         final HttpServletRequest req = (HttpServletRequest) request;
+        final Enumeration<String> hdrs = req.getHeaderNames();
+        while (hdrs.hasMoreElements()) {
+            final String hd = hdrs.nextElement();
+            logger.info(hd + " >>>> " + req.getHeader(hd));
+        }
         UserContext uc = UserContextHolder.getContext();
         uc.setCorrelationId(req.getHeader(UserContext.CORRELATION_ID));
         uc.setAuthToken(req.getHeader(UserContext.AUTH_TOKEN));
         uc.setOrgId(req.getHeader(UserContext.ORG_ID));
         uc.setUserId(req.getHeader(UserContext.USER_ID));
+        uc.setAuthorization(req.getHeader(UserContext.AUTHORIZATION));
         logger.info("user context filter " + uc.getCorrelationId());
+        logger.info("user context: " + uc);
         chain.doFilter(request, response);
     }
 

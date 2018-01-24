@@ -37,3 +37,5 @@ zuulsvr/target/
 zuulsvr/\.classpath
 
 oathsvr/target/
+
+zuulsvr/hs_err_pid12576\.log

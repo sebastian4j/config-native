@@ -32,8 +32,7 @@ public class LicenseService {
         return lr.findByOrganizationId(organizationId);
     }
 
-    public void saveLicense(License license) {
-        license.setId(UUID.randomUUID().toString());
+    public void saveLicense(License license) {        
         lr.save(license);
     }
 }

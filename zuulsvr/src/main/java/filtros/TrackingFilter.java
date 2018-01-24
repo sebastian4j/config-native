@@ -1,5 +1,10 @@
 package filtros;
 
+import java.util.Enumeration;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +20,20 @@ public class TrackingFilter extends ZuulFilter {
 
     @Override
     public Object run() {
+        RequestContext rc = RequestContext.getCurrentContext();
+        final HttpServletRequest request = rc.getRequest();
+        LOGGER.info(request.getRequestURI());
+        LOGGER.info(request.getServerPort());
+        LOGGER.info(request.getServerName());
+        LOGGER.info(request.getLocalAddr());
+        for (Entry<String, Object> e : rc.entrySet()) {
+            LOGGER.info(e.getKey() + " --> " + e.getValue());
+        }
+        final Enumeration<String> hdrs = request.getHeaderNames();  
+        while (hdrs.hasMoreElements()) {
+            final String hd =hdrs.nextElement(); 
+            LOGGER.info(hd + " >> " + request.getHeader(hd));
+        }
         if (fu.isCorrelationIdPresent()) {
             LOGGER.info("tmx-correlation-id found in tracking filter: " + fu.getCorrelationId());
         } else {

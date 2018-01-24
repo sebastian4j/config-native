@@ -16,7 +16,7 @@ public final class DelegatingUserContextCallable<V> implements Callable<V> {
     }
 
     public V call() throws Exception {
-        UserContextHolder.setContext( originalUserContext );
+        UserContextHolder.setContext(originalUserContext);
 
         try {
             return delegate.call();
