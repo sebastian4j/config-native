@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilterUtils {
 
+
     public static final String CORRELATION_ID = "tmx-correlation-id";
     public static final String AUTH_TOKEN = "tmx-auth-token";
     public static final String USER_ID = "tmx-user-id";
@@ -13,6 +14,7 @@ public class FilterUtils {
     public static final String PRE_FILTER_TYPE = "pre";
     public static final String POST_FILTER_TYPE = "post";
     public static final String ROUTE_FILTER_TYPE = "route";
+    public static final String AUTHORIZATION = "Authorization";
 
     public String getCorrelationId() {
         RequestContext ctx = RequestContext.getCurrentContext();
@@ -59,7 +61,7 @@ public class FilterUtils {
 
     public final String getAuthToken() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        return ctx.getRequest().getHeader(AUTH_TOKEN);
+        return ctx.getRequest().getHeader(AUTHORIZATION);
     }
 
     public String getServiceId() {
