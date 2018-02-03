@@ -1,5 +1,6 @@
 package com.sebastian.licenses;
 
+import com.sebastian.util.UserContextFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,8 +13,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
-import com.sebastian.util.UserContextFilter;
-
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.sebastian" })
 @EntityScan(basePackages = { "com.sebastian.dominio" })
@@ -23,11 +22,15 @@ import com.sebastian.util.UserContextFilter;
 @EnableFeignClients(basePackages = { "com.sebastian.clients" })
 @EnableCircuitBreaker
 @EnableResourceServer
+
 public class Application {
+//    private static final Logger LOGGER = Logger.getLogger(Application.class);
     @Bean
     public UserContextFilter userFilter() {
         return new UserContextFilter();
     }
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
