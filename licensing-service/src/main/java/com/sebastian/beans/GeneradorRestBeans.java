@@ -1,19 +1,13 @@
 package com.sebastian.beans;
 
+import com.sebastian.util.UserContextInterceptor;
 import java.util.Collections;
 import java.util.List;
-
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import com.sebastian.util.UserContextInterceptor;
 
 @Component
 public class GeneradorRestBeans {
